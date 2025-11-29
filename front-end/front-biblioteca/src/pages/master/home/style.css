@@ -1,0 +1,138 @@
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #fff;
+    font-family: "Poppins", sans-serif;
+}
+
+.admin-content {
+    padding: 40px 60px;
+}
+
+.admin-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.admin-subtitle {
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 40px;
+    font-size: 0.95rem;
+}
+
+/* GRID PRINCIPAL */
+.admin-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    width: 100%;
+}
+
+/* CADA LINHA DO GRID */
+.admin-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    width: 100%;
+}
+
+.admin-card {
+    flex: 1 1 360px;
+    border: 1px solid #d4d4d4;
+    border-radius: 10px;
+    padding: 32px;
+    transition: 0.2s ease;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 320px;
+    max-width: 600px;
+}
+
+.admin-card:hover {
+    border-color: #2c1970;
+    box-shadow: 0 4px 12px rgba(44, 25, 112, 0.15);
+}
+
+.admin-card-header {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.admin-card-header img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(13%) sepia(96%) saturate(2631%) hue-rotate(238deg) brightness(92%) contrast(101%);
+}
+
+.admin-card h2 {
+    font-size: 1.4rem;
+    color: #1a1a1a;
+}
+
+.admin-card p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 14px;
+}
+
+.admin-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-card-info strong {
+    font-size: 1.6rem;
+    color: #000;
+    font-weight: 600;
+}
+
+.admin-card-info span {
+    font-size: 1rem;
+    color: #555;
+}
+
+.admin-card-footer {
+    font-size: 0.95rem;
+    color: #555;
+    text-align: center;
+}
+
+/* Container do Link para posicionamento */
+.master-link-container {
+    position: absolute; /* Posiciona o link em relação ao .admin-content */
+    bottom: 30px; /* Distância da parte inferior */
+    right: 60px; /* Distância da lateral direita (igual ao padding do .admin-content) */
+    z-index: 10; /* Garante que fique acima de outros elementos se houver sobreposição */
+}
+
+/* Estilo do link/botão */
+.master-link-btn {
+    display: inline-block;
+    background-color: #f7f7f7; /* Cor de fundo suave */
+    color: #583d9e; /* Cor do texto roxo (primária) */
+    border: 1px solid #d1d5db;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none; /* Remove sublinhado padrão */
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.master-link-btn:hover {
+    background-color: #eee;
+    color: #482f81;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+

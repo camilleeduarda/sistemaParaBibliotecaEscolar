@@ -1,0 +1,191 @@
+/*
+ * Reutilizando a maioria dos estilos do componente RegistrarDevolucaoAdmin
+ * anterior, mas garantindo que o layout administrativo esteja completo.
+ */
+
+/* --- Estilos de Layout do Admin --- */
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    font-family: "Poppins", sans-serif;
+}
+
+.admin-content {
+    padding: 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.admin-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.admin-subtitle {
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 40px;
+    font-size: 0.95rem;
+}
+
+/* --- CARD PRINCIPAL --- */
+
+.consulta-card-container {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+.consulta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.consulta-header h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.btn-voltar {
+    background-color: #fff;
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-voltar:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+/* --- Mensagens de Feedback --- */
+.message {
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.message.success {
+    background: #e6ffed;
+    color: #00701a;
+    border: 1px solid #b3e6c3;
+}
+
+.message.error {
+    background: #ffe6e6;
+    color: #cc0000;
+    border: 1px solid #ffb3b3;
+}
+
+
+/* --- TABELA (livros-table) --- */
+.livros-table-container {
+    overflow-x: auto;
+}
+
+.livros-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    min-width: 700px; /* Garante que a tabela não fique muito estreita */
+}
+
+.livros-table th {
+    text-align: left;
+    padding: 12px 15px;
+    background-color: #f7f7f7;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.livros-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+    vertical-align: middle;
+}
+
+.livros-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.livros-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.action-header {
+    text-align: center;
+}
+
+.action-cell {
+    width: 150px; 
+    text-align: center;
+}
+
+/* --- BOTÃO DE AÇÃO (REGISTRAR DEVOLUÇÃO) --- */
+.btn-devolucao {
+    background-color: #583d9e; /* Cor roxa */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    min-width: 140px;
+}
+
+.btn-devolucao:hover:not(:disabled) {
+    background-color: #482f81;
+}
+
+.btn-devolucao:disabled {
+    background-color: #a5a5a5;
+    cursor: not-allowed;
+}
+
+/* --- Status Badge (Novo) --- */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.status-atrasado {
+    background-color: #fee2e2; /* Vermelho claro */
+    color: #b91c1c; /* Vermelho escuro */
+}
+
+.status-emprestado, .status-pendente {
+    background-color: #dbeafe; /* Azul claro */
+    color: #1e40af; /* Azul escuro */
+}
+
+/* --- MENSAGENS DE FEEDBACK --- */
+.loading-message, .no-results {
+    text-align: center;
+    padding: 40px 0;
+    color: #777;
+    font-size: 1.1rem;
+}

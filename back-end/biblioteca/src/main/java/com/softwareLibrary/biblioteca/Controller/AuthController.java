@@ -1,10 +1,8 @@
 package com.softwareLibrary.biblioteca.Controller;
 
-import com.softwareLibrary.biblioteca.DTO.AlunoLoginRequestDto;
-import com.softwareLibrary.biblioteca.DTO.AlunoLoginResponseDto;
-import com.softwareLibrary.biblioteca.DTO.LoginRequestDto;
-import com.softwareLibrary.biblioteca.DTO.LoginResponseDto;
+import com.softwareLibrary.biblioteca.DTO.*;
 import com.softwareLibrary.biblioteca.Entidade.Aluno;
+import com.softwareLibrary.biblioteca.Enums.TipoAcesso;
 import com.softwareLibrary.biblioteca.Service.AlunoService;
 import com.softwareLibrary.biblioteca.Service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +26,23 @@ public class AuthController {
     @PostMapping("/bibliotecaria")
     public ResponseEntity<?> loginBibliotecaria(@RequestBody LoginRequestDto loginRequest) {
         try {
-            boolean isAuthenticated = authService.authenticate(loginRequest.getSenha());
+            TipoAcesso tipo = authService.authenticate(loginRequest.getSenha());
 
-            if (isAuthenticated) {
-                return ResponseEntity.ok().body(new LoginResponseDto("Login realizado com sucesso"));
+            if (tipo != null) {
+                return ResponseEntity.ok().body(
+                        new LoginResponseDto(
+                                "Login realizado com sucesso",
+                                tipo.name()  // ADMIN ou MASTER
+                        )
+                );
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new LoginResponseDto("Senha incorreta"));
+                        .body(new LoginResponseDto("Senha incorreta", null));
             }
+
         } catch (Exception e) {
             return ResponseEntity.badRequest()
-                    .body(new LoginResponseDto("Erro durante a autenticação: " + e.getMessage()));
+                    .body(new LoginResponseDto("Erro durante a autenticação: " + e.getMessage(), null));
         }
     }
 
@@ -70,5 +74,47 @@ public class AuthController {
             return ResponseEntity.badRequest()
                     .body(new LoginResponseDto("Erro durante a autenticação: " + e.getMessage()));
         }
+
     }
+
+    @PostMapping("/alterar-senha")
+    public ResponseEntity<?> alterarSenha(@RequestBody AlterarSenhaRequestDto dto) {
+        try {
+            if (dto.getTipo() == null || dto.getNovaSenha() == null || dto.getSenhaAtual() == null) {
+                return ResponseEntity.badRequest().body("Todos os campos são obrigatórios.");
+            }
+
+            TipoAcesso tipo;
+            try {
+                tipo = TipoAcesso.valueOf(dto.getTipo().toUpperCase());
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Tipo inválido. Use ADMIN ou MASTER.");
+            }
+
+            // Validar senha atual
+            if (!authService.validarSenhaAtual(dto.getSenhaAtual(), tipo)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Senha atual incorreta.");
+            }
+
+            // Trocar senha
+            if (tipo == TipoAcesso.ADMIN) {
+                authService.setSenhaSistema(dto.getNovaSenha());
+            } else {
+                authService.setSenhaMaster(dto.getNovaSenha());
+            }
+
+            return ResponseEntity.ok().body(
+                    new LoginResponseDto("Senha alterada com sucesso")
+            );
+
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao alterar senha: " + e.getMessage());
+        }
+    }
+
+
+
 }

@@ -5,7 +5,9 @@ import com.softwareLibrary.biblioteca.Entidade.Livro;
 import com.softwareLibrary.biblioteca.Service.EmprestimoService;
 import com.softwareLibrary.biblioteca.Service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +35,7 @@ public class EmprestimoController {
             Emprestimo emprestimo = emprestimoService.realizarEmprestimo(matriculaAluno, isbnLivro);
             return ResponseEntity.status(HttpStatus.CREATED).body(emprestimo);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro ao realizar empréstimo: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("message", "Erro ao realizar empréstimo: " + e.getMessage()));
         }
     }
 
@@ -89,5 +91,18 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimoService.listarPendentesEAtrasados());
     }
 
+    @GetMapping("/relatorio/ultimos-30-dias")
+    public ResponseEntity<byte[]> gerarRelatorio() {
+
+        byte[] pdf = emprestimoService.gerarRelatorioPDF();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("filename", "relatorio_emprestimos_30dias.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdf);
+    }
 
 }

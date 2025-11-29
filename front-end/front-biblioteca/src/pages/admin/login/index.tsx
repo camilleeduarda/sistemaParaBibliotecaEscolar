@@ -1,18 +1,34 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// Assegure-se de que o arquivo de estilo esteja no caminho correto
 import "./style.css";
+
+// Estes caminhos de imagem são mantidos, mas você pode substituí-los por ícones SVG
 import logo from "../../../assets/cedup-logo.png";
 import bookIcon from "../../../assets/book-icon.png";
-import background from "../../../assets/library-bg.jpeg";
+
+// Interface para a resposta do backend
+interface AuthResponse {
+  mensagem: string;
+  tipoAcesso: "ADMIN" | "MASTER" | null;
+}
 
 function AdminLogin() {
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro("");
+    setLoading(true);
+
+    if (senha.trim() === "") {
+      setErro("Por favor, digite a senha.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8080/auth/bibliotecaria", {
@@ -23,22 +39,34 @@ function AdminLogin() {
         body: JSON.stringify({ senha }),
       });
 
+      // Lê a resposta JSON, independentemente do status (401, 200, etc.)
+      const data: AuthResponse = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        console.log("Aluno autenticado:", data);
-        navigate("/home/admin"); // redireciona se der certo
+        const tipoAcesso = data?.tipoAcesso;
+
+        if (tipoAcesso === "ADMIN") {
+          navigate("/home/admin");
+        } else if (tipoAcesso === "MASTER") {
+          navigate("/home/master");
+        } else {
+          setErro(data?.mensagem || "Login realizado, mas tipo de acesso desconhecido.");
+        }
       } else {
-        setErro("Senha inválida!");
+        // Usa a mensagem de erro do backend (ex: "Senha incorreta")
+        setErro(data?.mensagem || "Erro na autenticação. Verifique a senha.");
       }
     } catch (error) {
-      console.error("Erro na autenticação:", error);
-      setErro("Erro de conexão com o servidor.");
+      console.error("Erro de conexão ou processamento:", error);
+      setErro("Erro de conexão com o servidor. Tente novamente mais tarde.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-container">
-      <div className="login-left">
+      <div className="login-card">
         <img src={logo} alt="CEDUP Hermann Hering" className="login-logo" />
 
         <div className="login-title">
@@ -49,27 +77,23 @@ function AdminLogin() {
         <form className="login-form" onSubmit={handleSubmit}>
           <label htmlFor="senha">Senha</label>
           <input
-            type="text"
+            type="password"
             id="senha"
             placeholder="Digite sua senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
+            disabled={loading}
           />
 
           {erro && <p className="login-error">{erro}</p>}
 
-          <button type="submit">Entrar</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
         </form>
 
-        <p className="login-footer">
-          Acesso exclusivo para administradores
-        </p>
+        <p className="login-footer">Acesso exclusivo para administradores</p>
       </div>
-
-      <div
-        className="login-right"
-        style={{ backgroundImage: `url(${background})` }}
-      ></div>
     </div>
   );
 }

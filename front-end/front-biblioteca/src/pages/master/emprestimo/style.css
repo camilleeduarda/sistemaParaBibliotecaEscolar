@@ -130,7 +130,7 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: #5b3dae;
+    background: #6b4de6;
 }
 
 .btn-primary:disabled {
@@ -170,29 +170,6 @@
     border-top: 1px solid #e6e6e6;
     padding-top: 25px;
 }
-
-.table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.btn-relatorio {
-  background-color: #6b4de6; /* roxo */
-  border: none;
-  padding: 8px 14px;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
-}
-
-.btn-relatorio:hover {
-  background-color: #6b4de6;
-}
-
 
 .livros-table {
     width: 100%;

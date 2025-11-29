@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import searchIcon from "../../../assets/lupa_branca.png";
 import editIcon from "../../../assets/edicao.png";
-import Header from "../../../components/admin/header";
+import Header from "../../../components/master/header";
 import "./style.css";
 
 interface Livro {
@@ -35,7 +35,7 @@ interface LivroDetalhado {
 
 const categories = ["Título", "ISBN"];
 
-function ConsultaLivrosAdmin() {
+function ConsultaLivrosMaster() {
   const navigate = useNavigate();
 
   const [livros, setLivros] = useState<Livro[]>([]);
@@ -46,6 +46,7 @@ function ConsultaLivrosAdmin() {
 
   const [livroSelecionado, setLivroSelecionado] = useState<LivroDetalhado | null>(null);
 
+  // Busca livros na API (todos)
   const fetchLivros = async () => {
     try {
       const response = await fetch("http://localhost:8080/livro");
@@ -64,6 +65,7 @@ function ConsultaLivrosAdmin() {
     fetchLivros();
   }, []);
 
+  // Busca filtrada por categoria quando o botão é clicado
   const handleSearch = async () => {
     if (!termoBusca.trim()) {
       setLivrosFiltrados(livros);
@@ -72,6 +74,11 @@ function ConsultaLivrosAdmin() {
 
     try {
       setIsLoading(true);
+      let url = "";
+
+      if (categoria === "ISBN") {
+        url = `http://localhost:8080/livro/filtrar?isbn=${termoBusca}`;
+      }
 
       if (categoria === "Título") {
         const termo = termoBusca.toLowerCase();
@@ -81,16 +88,12 @@ function ConsultaLivrosAdmin() {
             livro.editora.toLowerCase().includes(termo)
         );
         setLivrosFiltrados(resultados);
-        return;
+      } else {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Erro na busca filtrada");
+        const data: Livro[] = await response.json();
+        setLivrosFiltrados(data);
       }
-
-      const response = await fetch(
-        `http://localhost:8080/livro/filtrar?isbn=${termoBusca}`
-      );
-      if (!response.ok) throw new Error("Erro na busca filtrada");
-
-      const data = await response.json();
-      setLivrosFiltrados(data);
     } catch (error) {
       console.error("Erro na busca filtrada:", error);
       setLivrosFiltrados([]);
@@ -99,8 +102,9 @@ function ConsultaLivrosAdmin() {
     }
   };
 
+  // Redireciona para página de edição
   const handleEdit = (livroId: number) => {
-    navigate(`/editarLivro/admin/${livroId}`);
+    navigate(`/editarLivro/master/${livroId}`);
   };
 
   const abrirPopup = async (id: number) => {
@@ -128,11 +132,10 @@ function ConsultaLivrosAdmin() {
         <div className="consulta-card-container">
           <div className="consulta-header">
             <h2>Consultar e Editar livros</h2>
-            <button className="btn-voltar" onClick={() => navigate("/home/admin")}>
-              Voltar
-            </button>
+            <button className="btn-voltar" onClick={() => navigate('/home/master')}>Voltar</button>
           </div>
 
+          {/* Barra de Busca */}
           <div className="search-bar-container">
             <input
               type="text"
@@ -143,6 +146,7 @@ function ConsultaLivrosAdmin() {
             />
 
             <select
+              id="category"
               className="filter-select"
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
@@ -159,6 +163,7 @@ function ConsultaLivrosAdmin() {
             </button>
           </div>
 
+          {/* Tabela de Livros */}
           <div className="livros-table-container">
             {isLoading ? (
               <p className="loading-message">Carregando livros...</p>
@@ -175,7 +180,6 @@ function ConsultaLivrosAdmin() {
                     <th>Ação</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {livrosFiltrados.map((livro) => (
                     <tr
@@ -266,9 +270,10 @@ function ConsultaLivrosAdmin() {
             </div>
           </div>
         )}
+
       </main>
     </div>
   );
 }
 
-export default ConsultaLivrosAdmin;
+export default ConsultaLivrosMaster;

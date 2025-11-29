@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // O cabeçalho para Admin geralmente é 'admin/header' ou algo assim,
 // mas vou manter a importação original do seu código:
-import Header from "../../../components/admin/header";
+import Header from "../../../components/master/header";
 import "./style.css";
 
-function CadastrarLivroAdmin() {
+function CadastrarLivroMaster() {
     const navigate = useNavigate();
 
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -60,7 +60,7 @@ function CadastrarLivroAdmin() {
             if (!response.ok) throw new Error();
 
             setMessage({ type: "success", text: "Livro cadastrado com sucesso!" });
-            setTimeout(() => navigate("/home/admin"), 1500);
+            setTimeout(() => navigate("/home/master"), 1500);
 
         } catch {
             setMessage({ type: "error", text: "Erro ao cadastrar o livro." });
@@ -83,7 +83,7 @@ function CadastrarLivroAdmin() {
                     <div className="card-header">
                         <h2 className="card-header-title">Cadastrar Livro</h2>
 
-                        <button className="btn-voltar" onClick={() => navigate("/home/admin")}>
+                        <button className="btn-voltar" onClick={() => navigate("/home/master")}>
                             Voltar
                         </button>
                     </div>
@@ -273,4 +273,4 @@ function CadastrarLivroAdmin() {
     );
 }
 
-export default CadastrarLivroAdmin;
+export default CadastrarLivroMaster;

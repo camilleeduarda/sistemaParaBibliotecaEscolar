@@ -1,7 +1,6 @@
 package com.softwareLibrary.biblioteca.Entidade;
 
 
-import com.softwareLibrary.biblioteca.Enums.StatusEmprestimo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

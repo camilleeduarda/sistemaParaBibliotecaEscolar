@@ -24,7 +24,7 @@ function addDays(date: Date, days: number) {
   return d;
 }
 
-function RegistrarEmprestimoAdmin() {
+function RegistrarEmprestimoMaster() {
   const navigate = useNavigate();
 
   const [isbn, setIsbn] = useState<string>("");
@@ -90,7 +90,7 @@ function RegistrarEmprestimoAdmin() {
       setIsbn("");
       setMatricula("");
 
-      setTimeout(() => navigate("/home/admin"), 1400);
+      setTimeout(() => navigate("/home/master"), 1400);
     } catch (error) {
       const text = error instanceof Error ? error.message : "Erro desconhecido.";
       setMessage({ type: "error", text });
@@ -150,7 +150,7 @@ function RegistrarEmprestimoAdmin() {
         <div className="card-wrapper">
           <div className="consulta-header">
             <h2>Registrar Empréstimo</h2>
-            <button className="btn-voltar" onClick={() => navigate("/home/admin")}>Voltar</button>
+            <button className="btn-voltar" onClick={() => navigate("/home/master")}>Voltar</button>
           </div>
 
           {message && <div className={`message ${message.type}`}>{message.text}</div>}
@@ -203,4 +203,4 @@ function RegistrarEmprestimoAdmin() {
   );
 }
 
-export default RegistrarEmprestimoAdmin;
+export default RegistrarEmprestimoMaster;

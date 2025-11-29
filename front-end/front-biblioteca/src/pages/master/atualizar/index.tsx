@@ -1,27 +1,50 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-// O cabeçalho para Admin geralmente é 'admin/header' ou algo assim,
-// mas vou manter a importação original do seu código:
-import Header from "../../../components/admin/header";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Header from "../../../components/master/header";
 import "./style.css";
 
-function CadastrarLivroAdmin() {
-    const navigate = useNavigate();
+interface Livro {
+    id: number;
+    isbn: string;
+    numeroChamada: string;
+    exemplares: number;
+    lingua: string;
+    autores: string[];
+    titulo: string;
+    edicao: string;
+    localPublicacao: string;
+    editora: string;
+    anoPublicacao: number;
+    descricaoFisica: string;
+    tituloSerie: string | null;
+    assuntos: string[];
+    cutter: string;
+    cdd: string;
+    disponivel: boolean;
+    autoresFormatados: string;
+    assuntosFormatados: string;
+}
 
+function EditarLivroMaster() {
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+
+    const [livro, setLivro] = useState<Livro | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
     const [formState, setFormState] = useState({
         isbn: "",
         numeroChamada: "",
-        exemplares: 1,
+        exemplares: 0,
         lingua: "",
         autores: [] as string[],
         titulo: "",
         edicao: "",
         localPublicacao: "",
         editora: "",
-        anoPublicacao: 0, 
+        anoPublicacao: 0,
         descricaoFisica: "",
         tituloSerie: "",
         assuntos: [] as string[],
@@ -29,8 +52,54 @@ function CadastrarLivroAdmin() {
         cdd: "",
     });
 
-    // INPUT COMUM
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    // =====================================================
+    // CARREGAR DADOS DO LIVRO
+    // =====================================================
+    useEffect(() => {
+        if (!id) {
+            setIsLoading(false);
+            setMessage({ type: "error", text: "ID do livro não fornecido." });
+            return;
+        }
+
+        const fetchLivro = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/livro/${id}`);
+                if (!response.ok) throw new Error("Erro ao buscar o livro");
+
+                const data: Livro = await response.json();
+                setLivro(data);
+
+                setFormState({
+                    isbn: data.isbn,
+                    numeroChamada: data.numeroChamada,
+                    exemplares: data.exemplares,
+                    lingua: data.lingua,
+                    autores: data.autores ?? [],
+                    titulo: data.titulo,
+                    edicao: data.edicao,
+                    localPublicacao: data.localPublicacao,
+                    editora: data.editora,
+                    anoPublicacao: data.anoPublicacao,
+                    descricaoFisica: data.descricaoFisica,
+                    tituloSerie: data.tituloSerie ?? "",
+                    assuntos: data.assuntos ?? [],
+                    cutter: data.cutter,
+                    cdd: data.cdd,
+                });
+
+            } catch (error) {
+                setMessage({ type: "error", text: "Erro ao carregar os dados." });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchLivro();
+    }, [id]);
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
         setFormState(prev => ({
             ...prev,
@@ -38,63 +107,90 @@ function CadastrarLivroAdmin() {
         }));
     };
 
-    // REGISTRAR LIVRO (POST)
-    const handleSubmit = async (e: React.FormEvent) => {
+    // ATUALIZAR LIVRO
+    const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
         setMessage(null);
 
-        const payload = {
-            ...formState,
-            autores: formState.autores.filter(a => a.trim() !== ""),
-            assuntos: formState.assuntos.filter(a => a.trim() !== ""),
-        };
-
         try {
-            const response = await fetch("http://localhost:8080/livro", {
-                method: "POST",
+            const response = await fetch(`http://localhost:8080/livro/${id}`, {
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(formState),
             });
 
             if (!response.ok) throw new Error();
 
-            setMessage({ type: "success", text: "Livro cadastrado com sucesso!" });
-            setTimeout(() => navigate("/home/admin"), 1500);
+            setMessage({ type: "success", text: "Livro atualizado com sucesso!" });
 
         } catch {
-            setMessage({ type: "error", text: "Erro ao cadastrar o livro." });
+            setMessage({ type: "error", text: "Erro ao atualizar o livro." });
         } finally {
             setIsSaving(false);
         }
     };
 
+    // DELETAR LIVRO
+    const handleDelete = async () => {
+        if (!window.confirm("Tem certeza que deseja deletar?")) return;
+
+        setIsSaving(true);
+        setMessage(null);
+
+        try {
+            const response = await fetch(`http://localhost:8080/livro/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) throw new Error();
+
+            setMessage({ type: "success", text: "Livro deletado com sucesso." });
+
+            setTimeout(() => navigate("/consulta/master"), 1500);
+
+        } catch {
+            setMessage({ type: "error", text: "Erro ao deletar o livro." });
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+
+    if (isLoading) {
+        return <div className="page-container">Carregando...</div>;
+    }
+
+    if (!livro) {
+        return <div className="page-container">{message?.text ?? "Erro ao carregar"}</div>;
+    }
+
     return (
+        // 1. Container principal do Admin
         <div className="admin-container">
-            <Header />
+            <Header /> {/* 2. Renderiza o Header */}
+
+            {/* 3. Conteúdo principal com classes de admin */}
             <main className="admin-content">
-                <h1 className="admin-title">Painel Administrativo</h1>
+                <h1 className="admin-title">Administração de Acervo</h1>
                 <p className="admin-subtitle">
-                    Gerencie o acervo e empréstimos da biblioteca
+                    Atualize os dados bibliográficos e informações do livro.
                 </p>
 
-                {/* O conteúdo do card existente */}
                 <div className="card">
                     <div className="card-header">
-                        <h2 className="card-header-title">Cadastrar Livro</h2>
+                        <h2 className="card-header-title">Editar Livro: {livro.titulo}</h2>
 
-                        <button className="btn-voltar" onClick={() => navigate("/home/admin")}>
+                        <button className="btn-voltar" onClick={() => navigate("/consulta/master")}>
                             Voltar
                         </button>
                     </div>
 
                     {message && <div className={`message ${message.type}`}>{message.text}</div>}
 
-                    <form onSubmit={handleSubmit} className="form-grid">
+                    <form onSubmit={handleUpdate} className="form-grid">
 
-                        {/* ... O restante do formulário é o mesmo ... */}
-                        
-                        {/* CAMPOS SIMPLES */}
+                        {/* CAMPOS NORMAIS */}
                         <div className="form-group">
                             <label>ISBN *</label>
                             <input name="isbn" value={formState.isbn} onChange={handleChange} required />
@@ -107,13 +203,14 @@ function CadastrarLivroAdmin() {
 
                         <div className="form-group">
                             <label>Título da Série</label>
-                            <input name="tituloSerie" value={formState.tituloSerie} onChange={handleChange} />
+                            <input name="tituloSerie" value={formState.tituloSerie ?? ""} onChange={handleChange} />
                         </div>
 
                         <div className="form-group">
                             <label>Edição</label>
                             <input name="edicao" value={formState.edicao} onChange={handleChange} />
                         </div>
+
 
                         {/* AUTORES */}
                         <div className="form-group full">
@@ -129,6 +226,7 @@ function CadastrarLivroAdmin() {
                                             setFormState(prev => ({ ...prev, autores: newList }));
                                         }}
                                     />
+
                                     <button
                                         type="button"
                                         className="btn-remove"
@@ -157,6 +255,7 @@ function CadastrarLivroAdmin() {
                                 + Adicionar Autor
                             </button>
                         </div>
+
 
                         {/* ASSUNTOS */}
                         <div className="form-group full">
@@ -202,7 +301,8 @@ function CadastrarLivroAdmin() {
                             </button>
                         </div>
 
-                        {/* CAMPOS RESTANTES */}
+
+                        {/* RESTANTE DOS CAMPOS */}
                         <div className="form-group">
                             <label>Número de Chamada</label>
                             <input name="numeroChamada" value={formState.numeroChamada} onChange={handleChange} />
@@ -236,7 +336,8 @@ function CadastrarLivroAdmin() {
                         <div className="form-group">
                             <label>Ano de Publicação</label>
                             <input
-                                name="anoPublicacao" 
+                                name="anoPublicacao"
+                                type="number" // Adicionando type="number" para consistência
                                 value={formState.anoPublicacao}
                                 onChange={handleChange}
                             />
@@ -259,10 +360,14 @@ function CadastrarLivroAdmin() {
                             />
                         </div>
 
-                        {/* BOTÃO */}
+                        {/* BOTÕES */}
                         <div className="form-actions full">
+                            <button type="button" className="btn-delete" onClick={handleDelete} disabled={isSaving}>
+                                {isSaving ? "Deletando..." : "Deletar Livro"}
+                            </button>
+
                             <button type="submit" className="btn-primary" disabled={isSaving}>
-                                {isSaving ? "Cadastrando..." : "Cadastrar Livro"}
+                                {isSaving ? "Salvando..." : "Atualizar Livro"}
                             </button>
                         </div>
 
@@ -273,4 +378,4 @@ function CadastrarLivroAdmin() {
     );
 }
 
-export default CadastrarLivroAdmin;
+export default EditarLivroMaster;

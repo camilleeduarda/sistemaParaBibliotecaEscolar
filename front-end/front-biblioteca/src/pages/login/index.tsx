@@ -26,7 +26,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log("Aluno autenticado:", data);
-        navigate("/home"); // redireciona se der certo
+        navigate("/home");
       } else {
         setErro("Matrícula inválida!");
       }

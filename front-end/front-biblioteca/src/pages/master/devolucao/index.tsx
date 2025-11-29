@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Importação correta do Header para o layout de admin
-import Header from "../../../components/admin/header"; 
+import Header from "../../../components/master/header"; 
 import "./style.css";
 
 interface Emprestimo {
@@ -13,7 +13,7 @@ interface Emprestimo {
     status: string; // Ex: "EMPRESTADO", "ATRASADO"
 }
 
-function RegistrarDevolucaoAdmin() {
+function RegistrarDevolucaoMaster() {
     const navigate = useNavigate();
     const [emprestimos, setEmprestimos] = useState<Emprestimo[]>([]);
     const [loading, setLoading] = useState(true);
@@ -86,7 +86,7 @@ function RegistrarDevolucaoAdmin() {
                 <div className="consulta-card-container">
                     <div className="consulta-header">
                         <h2>Registar Devolução</h2>
-                        <button className="btn-voltar" onClick={() => navigate("/home/admin")}>
+                        <button className="btn-voltar" onClick={() => navigate("/home/master")}>
                             Voltar
                         </button>
                     </div>
@@ -144,4 +144,4 @@ function RegistrarDevolucaoAdmin() {
     );
 }
 
-export default RegistrarDevolucaoAdmin;
+export default RegistrarDevolucaoMaster;

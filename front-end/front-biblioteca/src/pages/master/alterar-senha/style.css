@@ -1,0 +1,172 @@
+/*
+ * style-master.css: Estilos para a página de alteração de senha Master
+ * ATUALIZADO para seguir o padrão visual (tema roxo) do site.
+ */
+
+/* Estilos de layout padrão */
+.admin-container {
+    min-height: 100vh;
+    /* ATUALIZADO: Fundo para #f3f4f6 (padrão admin) */
+    background-color: #f3f4f6; 
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.admin-content {
+    padding: 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.admin-title {
+    font-size: 2rem;
+    /* ATUALIZADO: Cor do título (padrão admin) */
+    color: #1a1a1a; 
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.admin-subtitle {
+    font-size: 1.1rem;
+    /* ATUALIZADO: Cor do subtítulo (padrão admin) */
+    color: #555; 
+    margin-bottom: 30px;
+}
+
+/* Card principal da Alteração de Senha */
+.master-password-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* ATUALIZADO: Borda (padrão admin) */
+    border-bottom: 1px solid #e5e7eb; 
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+    /* ATUALIZADO: Cor (padrão admin) */
+    color: #1f2937; 
+    margin: 0;
+    font-weight: 600; /* Dando mais peso */
+}
+
+/* ATUALIZADO: Botão voltar para o padrão (branco/cinza) */
+.btn-voltar {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #4b5563;
+    transition: all 0.2s;
+}
+
+.btn-voltar:hover:not(:disabled) {
+    background: #f3f4f6;
+}
+
+/* Mensagens de feedback (sucesso/erro) - ATUALIZADO para padrão admin */
+.message {
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.message.success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.message.error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* Formulário de Senha */
+.password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Centralizando o formulário no card */
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.password-form input {
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.password-form input:focus {
+    /* ATUALIZADO: Foco roxo */
+    border-color: #583d9e;
+    box-shadow: 0 0 0 3px rgba(88, 61, 158, 0.25);
+    outline: none;
+}
+
+/* Botão de Alterar Senha */
+.btn-alterar {
+    /* ATUALIZADO: Cor primária roxa */
+    background-color: #583d9e; 
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+
+.btn-alterar:hover:not(:disabled) {
+    /* ATUALIZADO: Hover roxo escuro */
+    background-color: #482f81;
+}
+
+.btn-alterar:disabled {
+    background-color: #b8c0cb;
+    cursor: not-allowed;
+}
+
+/* Responsividade básica */
+@media (max-width: 768px) {
+    .admin-content {
+        padding: 20px;
+    }
+    .simulated-header {
+        padding: 15px 20px;
+    }
+    .master-password-card {
+        padding: 20px;
+    }
+}

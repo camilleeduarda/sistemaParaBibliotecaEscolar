@@ -1,14 +1,10 @@
 package com.softwareLibrary.biblioteca.Service;
 
-import com.softwareLibrary.biblioteca.Entidade.Aluno;
 import com.softwareLibrary.biblioteca.Entidade.Emprestimo;
-import com.softwareLibrary.biblioteca.Entidade.Livro;
-import com.softwareLibrary.biblioteca.Enums.StatusEmprestimo;
 import com.softwareLibrary.biblioteca.Repository.EmprestimoRepository;
 import com.softwareLibrary.biblioteca.Repository.LivroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +25,9 @@ public class EmprestimoService {
 
     @Autowired
     private LivroRepository livroRepository;
+
+    @Autowired
+    private PdfService pdfService;
 
     public Emprestimo realizarEmprestimo(String matriculaAluno, String isbnLivro) {
 
@@ -52,8 +51,8 @@ public class EmprestimoService {
         }
 
         // Verificar se livro já está emprestado
-        if (emprestimoRepository.findByIsbnLivroAndStatus(isbnLivro, "PENDENTE").isPresent()) {
-            throw new RuntimeException("Livro já está emprestado");
+        if (!livroService.isLivroDisponivel(isbnLivro)) {
+            throw new RuntimeException("Livro não disponível ");
         }
 
         Emprestimo emprestimo = new Emprestimo(matriculaAluno, isbnLivro);
@@ -61,17 +60,20 @@ public class EmprestimoService {
     }
 
     public Emprestimo devolverLivro(String matricula) {
-        Optional<Emprestimo> emprestimoOpt = emprestimoRepository.findByMatriculaAluno(matricula);
-        if (emprestimoOpt.isPresent()) {
-            Emprestimo emprestimo = emprestimoOpt.get();
-            if (!"DEVOLVIDO".equals(emprestimo.getStatus())) {
-                emprestimo.devolver();
-                return emprestimoRepository.save(emprestimo);
-            } else {
-                throw new RuntimeException("Empréstimo já está devolvido");
-            }
+        List<Emprestimo> emprestimos = emprestimoRepository.findAllByMatriculaAlunoAndStatusNot(matricula, "DEVOLVIDO");
+
+        if (emprestimos.isEmpty()) {
+            throw new RuntimeException("Nenhum empréstimo ativo encontrado");
         }
-        throw new RuntimeException("Empréstimo não encontrado");
+
+        if (emprestimos.size() > 1) {
+            throw new RuntimeException("Mais de um empréstimo ativo encontrado para esta matrícula");
+        }
+
+        Emprestimo emprestimo = emprestimos.get(0);
+
+        emprestimo.devolver();
+        return emprestimoRepository.save(emprestimo);
     }
 
     public List<Emprestimo> listarTodos() {
@@ -104,11 +106,8 @@ public class EmprestimoService {
         );
     }
 
-
-    public Optional<Emprestimo> buscarEmprestimoAtivoPorAluno(String matriculaAluno) {
-        List<Emprestimo> ativos = emprestimoRepository.findByMatriculaAlunoAndStatus(matriculaAluno, "EMPRESTINO");
-        return ativos.isEmpty() ? Optional.empty() : Optional.of(ativos.get(0));
+    public byte[] gerarRelatorioPDF() {
+        return pdfService.gerarRelatorioUltimos30Dias();
     }
-
 
 }

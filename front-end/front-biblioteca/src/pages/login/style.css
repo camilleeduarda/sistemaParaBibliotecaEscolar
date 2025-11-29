@@ -6,7 +6,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-body, html {
+html, body {
   height: 100%;
   width: 100%;
 }
@@ -16,196 +16,113 @@ body, html {
   display: flex;
   height: 100vh;
   width: 100%;
-
 }
 
-/* LADO ESQUERDO (FORMULÁRIO) */
+/* CARD (ALINHADO NO CENTRO, NÃO TELA TODA) */
 .login-left {
-  background: #ffffff;
+  width: 45%;
+  min-width: 400px;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;     /* centraliza verticalmente o conteúdo */
-  align-items: center;          /* centraliza horizontalmente o conteúdo */
-  text-align: center;
-  padding: 2rem 4rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  max-width: 50vw;;             /* largura máxima do card */
-  width: 100%;
-  height: auto;
+  justify-content: center;
+  align-items: center;
+
+  background: white;
+
+  padding: 2rem 3rem;
+
+  /* removido borda arredondada exagerada */
+  border-radius: 8px;
+
+  /* sombra mais leve (igual imagem) */
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+
+  /* Para não esticar verticalmente */
+  height: 100vh;
+  margin: auto;  /* centraliza vertical e horizontalmente */
 }
 
-@media (max-width: 900px) {
-  .login-left {
-    max-width: 90%; /* ocupa 90% da tela */
-    padding: 1.5rem 2rem; /* reduz padding para caber melhor */
-  }
+/* LADO DIREITO — IMAGEM DE FUNDO */
+.login-right {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
 }
 
 /* LOGO */
 .login-logo {
-  width: 200px;
-  max-width: 60%;
-  margin: 35px;
+  width: 230px;    /* aumentei igual a imagem */
+  margin-bottom: 25px;
 }
 
 /* TÍTULO */
 .login-title {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 2rem;
-  color: #000;
+  gap: 10px;
+  margin-bottom: 1.8rem;
 }
 
 .book-icon {
-  width: 28px;
-  height: 28px;
-}
-
-.login-title h1 {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 600;
+  width: 26px;
 }
 
 /* FORMULÁRIO */
 .login-form {
   width: 100%;
-  max-width: 380px;
+  max-width: 360px; /* mais estreito, igual imagem */
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
   text-align: left;
-}
-
-.login-form label {
-  font-size: 14px;
-  color: #333;
 }
 
 .login-form input {
   padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #bfbfbf; /* borda suave igual imagem */
 }
 
-.login-form input:focus {
-  outline: none;
-  border-color: #29166F;
-  box-shadow: 0 0 0 2px rgba(41, 22, 111, 0.2);
-}
-
-/* BOTÃO */
 .login-form button {
   background-color: #29166F;
   color: white;
-  font-weight: 500;
-  border: none;
-  border-radius: 6px;
   padding: 12px;
+  border-radius: 6px;
+  border: none;
   cursor: pointer;
-  font-size: 15px;
-  transition: 0.3s ease;
+  margin-top: 5px;
 }
 
-.login-form button:hover {
-  background-color: #3b2a91;
-}
-
-/* MENSAGEM DE ERRO */
+/* ERRO */
 .login-error {
   color: red;
-  margin-top: 5px;
   font-size: 0.9rem;
-  text-align: left;
 }
 
 /* RODAPÉ */
 .login-footer {
   font-size: 12px;
-  color: #555;
-  margin-top: 20px;
-  text-align: center;
+  color: #666;
+  margin-top: 18px;
 }
 
-/* LADO DIREITO (IMAGEM) */
-.login-right {
-  flex: 1;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* ========= RESPONSIVIDADE ========= */
-
-/* Tablets (até 1024px) */
-@media (max-width: 1024px) {
-  .login-left {
-    padding: 0 5vw;
-  }
-
-  .login-logo {
-    margin-bottom: 2rem;
-  }
-
-  .login-title h1 {
-    font-size: 24px;
-  }
-}
-
-/* Celulares (até 900px) */
+/* RESPONSIVIDADE */
 @media (max-width: 900px) {
   .login-container {
     flex-direction: column;
   }
 
   .login-left {
-    width: 100%;
-    padding: 40px 20px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .login-title {
-    justify-content: center;
-  }
-
-  .login-form {
-    align-items: center;
-  }
-
-  .login-form label,
-  .login-error {
-    text-align: left;
-    width: 100%;
+    width: 95%;
+    margin: 20px auto;
+    box-shadow: none;
   }
 
   .login-right {
     width: 100%;
-    height: 40vh;
-  }
-
-  .login-footer {
-    margin-left: 0;
-    text-align: center;
-  }
-}
-
-/* Telas muito pequenas (até 480px) */
-@media (max-width: 480px) {
-  .login-logo {
-    width: 160px;
-  }
-
-  .login-form input,
-  .login-form button {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .login-title h1 {
-    font-size: 20px;
+    height: 35vh;
   }
 }

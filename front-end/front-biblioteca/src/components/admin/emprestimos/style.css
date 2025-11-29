@@ -1,0 +1,79 @@
+/* --- TABELA DE LIVROS --- */
+
+.livros-table-container {
+    overflow-x: auto; /* Garante scroll em telas pequenas */
+}
+
+.livros-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    min-width: 600px;
+}
+
+.livros-table th {
+    text-align: left;
+    padding: 12px 15px;
+    background-color: #f7f7f7;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.livros-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+    vertical-align: middle;
+}
+
+.livros-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.livros-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+/* --- TAGS DE STATUS --- */
+
+.status-tag {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* --- BOTÃO DE AÇÃO (EDITAR) --- */
+
+.action-cell {
+    width: 80px; /* Garante que a coluna de ação não seja muito larga */
+    text-align: center;
+}
+
+.edit-button {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.edit-button:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.edit-button img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    /* Filtrar o ícone de edição (edicao.png) para uma cor escura, se necessário */
+    filter: invert(10%) sepia(1%) saturate(320%) hue-rotate(334deg) brightness(98%) contrast(90%);
+}
