@@ -11,6 +11,8 @@
 📌 Trabalho de Conclusão de Curso – Instituto CEDUP Hermann Hering  
 📅 Turma de Desenvolvimento de Sistemas (2023 – 2025)  
 
+Documentação: [_Monografia do Sistema de Gerenciamento de Biblioteca do CEDUP Hermann Hering.docx (2).pdf](https://github.com/user-attachments/files/23834822/_Monografia.do.Sistema.de.Gerenciamento.de.Biblioteca.do.CEDUP.Hermann.Hering.docx.2.pdf)
+
 ---
 
 ## 📑 Sumário
